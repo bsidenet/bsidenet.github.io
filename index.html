@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Pessoal</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* Fonte moderna e clean */
+            margin: 0;
+            background-color: #f8f9fa; /* Tom de fundo levemente acinzentado */
+            color: #343a40; /* Cor do texto principal */
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px; /* Mais espaçamento vertical */
+        }
+
+        .container {
+            max-width: 700px; /* Largura um pouco menor para focar no conteúdo */
+            background-color: #fff;
+            padding: 40px; /* Mais espaço interno */
+            border-radius: 12px; /* Bordas mais arredondadas */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Sombra mais suave */
+            text-align: center;
+        }
+
+        .profile-image {
+            width: 120px; /* Tamanho da imagem ajustado */
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 25px;
+            border: 4px solid #e0f2f7; /* Borda sutil */
+        }
+
+        h1 {
+            color: #212529; /* Cor do título */
+            margin-bottom: 15px;
+            font-size: 2.5em; /* Tamanho do título ajustado */
+            font-weight: 600; /* Peso da fonte um pouco mais forte */
+        }
+
+        .tagline {
+            color: #6c757d; /* Cor da tagline */
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .social-links {
+            margin-bottom: 35px;
+        }
+
+        .social-links a {
+            display: inline-block;
+            margin: 0 15px;
+            color: #007bff; /* Cor primária para links */
+            text-decoration: none;
+            font-size: 1.3em;
+            transition: color 0.3s ease-in-out; /* Transição suave para hover */
+        }
+
+        .social-links a:hover {
+            color: #0056b3;
+        }
+
+        .repositories-section {
+            margin-top: 40px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .repositories-section h2 {
+            color: #212529;
+            border-bottom: 2px solid #dee2e6; /* Borda mais clara */
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: 500;
+        }
+
+        #repositories-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        #repositories-list li {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 6px solid #007bff; /* Destaque lateral */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease-in-out; /* Efeito sutil ao passar o mouse */
+        }
+
+        #repositories-list li:hover {
+            transform: translateY(-2px);
+        }
+
+        #repositories-list li a {
+            color: #343a40;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1em;
+        }
+
+        #repositories-list li p {
+            color: #6c757d;
+            font-size: 0.95em;
+            margin-top: 8px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <img src="https://via.placeholder.com/120" alt="Sua Foto de Perfil" class="profile-image">
+        <h1>[Seu Nome]</h1>
+        <p class="tagline">[Sua Breve Descrição - Ex: Desenvolvedor Front-end | Entusiasta de Open Source]</p>
+        <div class="social-links">
+            <a href="https://github.com/[SeuNomeDeUsuarioGithub]" target="_blank" aria-label="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.54 6.76-2.77 6.76-6.22 0-1.35-.45-2.47-1.2-3.46a9.24 9.24 0 0 0-2.53-1.2c.61-.13 1.32-.4 1.32-.94 0-.67-.22-1.28-.59-1.69a6.5 6.5 0 0 0-.08-.76 6.5 6.5 0 0 0-.94-.46 6.5 6.5 0 0 0-.48.03c-.15-.02-.3-.03-.46-.03C11.75 12.2 10.8 11.6 9.95 11.6c-.15 0-.3.02-.46.03-.48-.02-.94-.46-.94-.46a6.5 6.5 0 0 0-.59 1.69c0 .54.71.81 1.32.94a9.24 9.24 0 0 0-2.53 1.2c-.75.99-1.2 2.12-1.2 3.46 0 3.45 3.62 5.7 6.76 6.22a3.37 3.37 0 0 0-.94 2.61v3.87m14-6c-1.86-1.86-2.86-4.6-2.86-7.4V5"/></svg></a>
+            </div>
+
+        <div class="repositories-section">
+            <h2>Meus Repositórios Públicos</h2>
+            <ul id="repositories-list">
+                </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; [Ano Atual] [Seu Nome]. Todos os direitos reservados.</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = '[SeuNomeDeUsuarioGithub]'; // Substitua pelo seu nome de usuário do GitHub
+            const repositoriesList = document.getElementById('repositories-list');
+
+            fetch(`https://api.github.com/users/${username}/repos?sort=pushed`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        data.forEach(repo => {
+                            const listItem = document.createElement('li');
+                            listItem.innerHTML = `
+                                <a href="${repo.html_url}" target="_blank">${repo.name}</a>
+                                <p>${repo.description || 'Sem descrição.'}</p>
+                            `;
+                            repositoriesList.appendChild(listItem);
+                        });
+                    } else {
+                        repositoriesList.innerHTML = '<p>Nenhum repositório público encontrado.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar repositórios:', error);
+                    repositoriesList.innerHTML = '<p>Ocorreu um erro ao carregar os repositórios.</p>';
+                });
+        });
+    </script>
+</body>
+</html>
