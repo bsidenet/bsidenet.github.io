@@ -136,6 +136,7 @@
       font-size: 1.05em;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 10px;
     }
 
@@ -157,8 +158,10 @@
       font-size: 0.9em;
       color: var(--verde-principal);
       text-decoration: none;
-      display: inline-block;
-      margin-top: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      float: right;
     }
 
     .footer {
@@ -255,17 +258,16 @@
 
         li.innerHTML = `
           <span class="repo-name">
-            <i class="fas fa-folder"></i>
-            ${repo.name}
+            <span><i class="fas fa-folder"></i> ${repo.name}</span>
+            <a class="repo-link" href="${repo.html_url}" target="_blank"><i class="fas fa-arrow-up-right-from-square"></i></a>
           </span>
           <div class="repo-description">
             ${repo.description || 'Sem descrição.'}
-            <br />
-            <a class="repo-link" href="${repo.html_url}" target="_blank">Ver no GitHub</a>
           </div>
         `;
 
-        li.addEventListener('click', () => {
+        li.addEventListener('click', e => {
+          if (e.target.closest('a')) return;
           document.querySelectorAll('.repo-item').forEach(el => {
             if (el !== li) {
               el.classList.remove('expanded');
@@ -275,14 +277,13 @@
           });
           li.classList.toggle('expanded');
           const icon = li.querySelector('i');
-          if (icon) icon.className = li.classList.contains('expanded') ? 'fas fa-folder-open' : 'fas fa-folder';
+          if (icon && !icon.closest('a')) icon.className = li.classList.contains('expanded') ? 'fas fa-folder-open' : 'fas fa-folder';
         });
 
         repoList.appendChild(li);
       });
     }
 
-    // Ativar dark mode por padrão
     document.body.classList.remove('light');
   </script>
 </body>
