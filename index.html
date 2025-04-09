@@ -3,172 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Pessoal</title>
+    <title>Ricardo Lopes | Desenvolvedor Front-end</title>
+    <meta name="description" content="Página pessoal de Ricardo Lopes, desenvolvedor front-end e entusiasta de open source. Veja os meus repositórios públicos no GitHub.">
+    <meta name="keywords" content="Ricardo Lopes, Front-end, GitHub, Open Source, Programador, HTML, CSS, JavaScript">
+    <meta name="author" content="Ricardo Lopes">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap">
+
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
+        :root {
+            --cor-principal: #C7D75B;
+            --cor-secundaria: #D2DE81;
+            --cor-fundo: #fdfdf9;
+            --cor-texto: #222;
+        }
+
+        * {
             margin: 0;
-            background-color: #f8f9fa;
-            color: #343a40;
-            line-height: 1.7;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 200;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
         }
 
         .container {
-            max-width: 700px;
+            width: 100%;
+            max-width: 800px;
             background-color: #fff;
-            padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            text-align: center;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
         }
 
-        .profile-image {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 25px;
-            border: 4px solid #e0f2f7;
+        header {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
         h1 {
-            color: #212529;
-            margin-bottom: 15px;
-            font-size: 2.5em;
+            font-size: 2.8em;
             font-weight: 600;
+            color: var(--cor-principal);
         }
 
         .tagline {
-            color: #6c757d;
-            margin-bottom: 30px;
             font-size: 1.1em;
+            color: #666;
+            margin-top: 10px;
         }
 
         .social-links {
-            margin-bottom: 35px;
+            margin-top: 20px;
         }
 
         .social-links a {
-            display: inline-block;
-            margin: 0 15px;
-            color: #007bff;
+            color: var(--cor-principal);
+            font-size: 1.4em;
+            margin: 0 10px;
+            transition: color 0.3s ease;
             text-decoration: none;
-            font-size: 1.3em;
-            transition: color 0.3s ease-in-out;
         }
 
         .social-links a:hover {
-            color: #0056b3;
+            color: var(--cor-secundaria);
         }
 
-        .repositories-section {
+        section.repositories {
             margin-top: 40px;
-            text-align: left;
-            width: 100%;
         }
 
-        .repositories-section h2 {
-            color: #212529;
-            border-bottom: 2px solid #dee2e6;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+        section.repositories h2 {
             font-size: 1.8em;
-            font-weight: 500;
+            color: var(--cor-principal);
+            border-bottom: 2px solid var(--cor-secundaria);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
 
-        #repositories-list {
+        ul#repositories-list {
             list-style: none;
-            padding: 0;
         }
 
-        #repositories-list li {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 6px;
+        ul#repositories-list li {
+            background: var(--cor-secundaria);
             margin-bottom: 15px;
-            border-left: 6px solid #007bff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
         }
 
-        #repositories-list li .repo-name-link {
-            color: #343a40;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.1em;
-            cursor: pointer; /* Indica que é clicável */
+        ul#repositories-list li:hover {
+            background: var(--cor-principal);
         }
 
-        #repositories-list li .repo-description {
-            color: #6c757d;
+        .repo-name {
+            font-weight: 400;
+            font-size: 1.2em;
+            color: #222;
+            cursor: pointer;
+        }
+
+        .repo-description {
+            margin-top: 10px;
             font-size: 0.95em;
-            margin-top: 8px;
-            display: none; /* Inicialmente escondido */
+            display: none;
+            color: #333;
         }
 
-        #repositories-list li.expanded .repo-description {
-            display: block; /* Mostra a descrição quando a classe 'expanded' é adicionada */
-        }
-
-        .footer {
-            margin-top: 50px;
-            color: #6c757d;
+        .repo-link {
+            display: inline-block;
+            margin-top: 10px;
             font-size: 0.9em;
+            color: #222;
+            text-decoration: underline;
+        }
+
+        li.expanded .repo-description {
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <!-- <img src="https://via.placeholder.com/120" alt="Sua Foto de Perfil" class="profile-image"> -->
-        <h1>Ricardo Lopes</h1>
-        <p class="tagline">Desenvolvedor Front-end | Entusiasta de Open Source</p>
-        <div class="social-links">
-            <a href="https://github.com/[SeuNomeDeUsuarioGithub]" target="_blank" aria-label="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.54 6.76-2.77 6.76-6.22 0-1.35-.45-2.47-1.2-3.46a9.24 9.24 0 0 0-2.53-1.2c.61-.13 1.32-.4 1.32-.94 0-.67-.22-1.28-.59-1.69a6.5 6.5 0 0 0-.08-.76 6.5 6.5 0 0 0-.94-.46 6.5 6.5 0 0 0-.48.03c-.15-.02-.3-.03-.46-.03C11.75 12.2 10.8 11.6 9.95 11.6c-.15 0-.3.02-.46.03-.48-.02-.94-.46-.94-.46a6.5 6.5 0 0 0-.59 1.69c0 .54.71.81 1.32.94a9.24 9.24 0 0 0-2.53 1.2c-.75.99-1.2 2.12-1.2 3.46 0 3.45 3.62 5.7 6.76 6.22a3.37 3.37 0 0 0-.94 2.61v3.87m14-6c-1.86-1.86-2.86-4.6-2.86-7.4V5"/></svg></a>
+    <main class="container">
+        <header>
+            <h1>Ricardo Lopes</h1>
+            <p class="tagline">Desenvolvedor Front-end | Entusiasta de Open Source</p>
+            <div class="social-links">
+                <a href="https://github.com/bsidenet" target="_blank" aria-label="GitHub">GitHub</a>
             </div>
+        </header>
 
-        <div class="repositories-section">
-            <h2>Meus Repositórios Públicos</h2>
+        <section class="repositories">
+            <h2>Repositórios Públicos</h2>
             <ul id="repositories-list">
-                </ul>
-        </div>
-    </div>
+                <li>A carregar repositórios...</li>
+            </ul>
+        </section>
+    </main>
 
-    <div class="footer">
-        <p>&copy; 2025 . Todos os direitos reservados.</p>
-    </div>
+    <footer>
+        <p>&copy; 2025 Ricardo Lopes. Todos os direitos reservados.</p>
+    </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', () => {
             const username = 'bsidenet';
-            const repositoriesList = document.getElementById('repositories-list');
+            const list = document.getElementById('repositories-list');
 
             fetch(`https://api.github.com/users/${username}/repos?sort=pushed`)
                 .then(response => response.json())
-                .then(data => {
-                    if (data && data.length > 0) {
-                        data.forEach(repo => {
-                            const listItem = document.createElement('li');
-                            listItem.innerHTML = `
-                                <a href="${repo.html_url}" target="_blank" class="repo-name-link">${repo.name}</a>
-                                <p class="repo-description">${repo.description || 'Sem descrição.'}</p>
-                            `;
-                            listItem.querySelector('.repo-name-link').addEventListener('click', function(event) {
-                                event.preventDefault(); // Impede o link de redirecionar imediatamente
-                                listItem.classList.toggle('expanded');
-                            });
-                            repositoriesList.appendChild(listItem);
-                        });
-                    } else {
-                        repositoriesList.innerHTML = '<p>Nenhum repositório público encontrado.</p>';
+                .then(repos => {
+                    list.innerHTML = '';
+                    if (repos.length === 0) {
+                        list.innerHTML = '<li>Sem repositórios públicos.</li>';
+                        return;
                     }
+
+                    repos.forEach(repo => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <span class="repo-name">${repo.name}</span>
+                            <p class="repo-description">${repo.description || 'Sem descrição disponível.'}<br>
+                            <a href="${repo.html_url}" target="_blank" class="repo-link">Ver no GitHub</a></p>
+                        `;
+                        li.querySelector('.repo-name').addEventListener('click', () => {
+                            li.classList.toggle('expanded');
+                        });
+                        list.appendChild(li);
+                    });
                 })
-                .catch(error => {
-                    console.error('Erro ao buscar repositórios:', error);
-                    repositoriesList.innerHTML = '<p>Ocorreu um erro ao carregar os repositórios.</p>';
+                .catch(() => {
+                    list.innerHTML = '<li>Erro ao carregar os repositórios.</li>';
                 });
         });
     </script>
