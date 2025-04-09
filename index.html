@@ -170,37 +170,49 @@
         <p>&copy; 2025 Ricardo Lopes. Todos os direitos reservados.</p>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const username = 'bsidenet';
-            const list = document.getElementById('repositories-list');
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const username = 'bsidenet';
+        const list = document.getElementById('repositories-list');
 
-            fetch(`https://api.github.com/users/${username}/repos?sort=pushed`)
-                .then(response => response.json())
-                .then(repos => {
-                    list.innerHTML = '';
-                    if (repos.length === 0) {
-                        list.innerHTML = '<li>Sem repositórios públicos.</li>';
-                        return;
-                    }
+        fetch(`https://api.github.com/users/${username}/repos?sort=pushed`)
+            .then(response => response.json())
+            .then(repos => {
+                list.innerHTML = '';
+                if (repos.length === 0) {
+                    list.innerHTML = '<li>Sem repositórios públicos.</li>';
+                    return;
+                }
 
-                    repos.forEach(repo => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `
-                            <span class="repo-name">${repo.name}</span>
-                            <p class="repo-description">${repo.description || 'Sem descrição disponível.'}<br>
-                            <a href="${repo.html_url}" target="_blank" class="repo-link">Ver no GitHub</a></p>
-                        `;
-                        li.querySelector('.repo-name').addEventListener('click', () => {
-                            li.classList.toggle('expanded');
-                        });
-                        list.appendChild(li);
+                repos.forEach(repo => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span class="repo-name">${repo.name}</span>
+                        <p class="repo-description">${repo.description || 'Sem descrição disponível.'}<br>
+                        <a href="${repo.html_url}" target="_blank" class="repo-link">Ver no GitHub</a></p>
+                    `;
+
+                    li.querySelector('.repo-name').addEventListener('click', () => {
+                        const allItems = list.querySelectorAll('li');
+                        const isAlreadyOpen = li.classList.contains('expanded');
+
+                        // Fecha todos
+                        allItems.forEach(item => item.classList.remove('expanded'));
+
+                        // Se não estava aberto, abre este
+                        if (!isAlreadyOpen) {
+                            li.classList.add('expanded');
+                        }
                     });
-                })
-                .catch(() => {
-                    list.innerHTML = '<li>Erro ao carregar os repositórios.</li>';
+
+                    list.appendChild(li);
                 });
-        });
-    </script>
+            })
+            .catch(() => {
+                list.innerHTML = '<li>Erro ao carregar os repositórios.</li>';
+            });
+    });
+</script>
+
 </body>
 </html>
