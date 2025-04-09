@@ -13,7 +13,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap');
 
     :root {
-      --verde-principal: #a8d08d;
+      --verde-principal: #b5ffb5;
       --verde-secundario: #c4e1ad;
       --cinza-claro: #f5f5f5;
       --cinza-escuro: #2e2e2e;
@@ -124,6 +124,18 @@
       padding: 0;
     }
 
+    .repo-language-group {
+      margin-bottom: 30px;
+    }
+
+    .repo-language-title {
+      font-size: 1.3em;
+      margin: 20px 0 10px;
+      color: var(--verde-principal);
+      border-bottom: 1px solid var(--verde-principal);
+      padding-bottom: 5px;
+    }
+
     .repo-item {
       padding: 16px 20px;
       border-bottom: 1px solid var(--borda-suave);
@@ -142,7 +154,6 @@
 
     .repo-description {
       font-size: 0.95em;
-      margin-top: 8px;
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.5s ease, opacity 0.4s ease;
@@ -161,7 +172,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      float: right;
+      white-space: nowrap;
     }
 
     .footer {
@@ -191,6 +202,9 @@
       <h2>Meus Repositórios Públicos</h2>
       <div class="language-buttons" id="languageButtons"></div>
       <ul id="repositories-list"></ul>
+      <button id="clearFilterBtn" class="language-button" style="display: none; margin-top: 15px;">
+        Ver Todos
+      </button>
     </div>
   </div>
 
@@ -204,6 +218,7 @@
     const languageButtons = document.getElementById('languageButtons');
     const darkToggle = document.getElementById('darkToggle');
     const icon = darkToggle.querySelector('i');
+    const clearFilterBtn = document.getElementById('clearFilterBtn');
     let allRepos = [];
 
     const toggleTheme = () => {
@@ -223,12 +238,15 @@
       });
 
     function renderLanguageButtons(langs) {
+      languageButtons.innerHTML = '';
+
       const allBtn = document.createElement('button');
       allBtn.textContent = 'Todos';
       allBtn.className = 'language-button active';
       allBtn.addEventListener('click', () => {
         setActiveButton(allBtn);
         renderRepos(allRepos);
+        clearFilterBtn.style.display = 'none';
       });
       languageButtons.appendChild(allBtn);
 
@@ -240,10 +258,20 @@
           setActiveButton(btn);
           const filtered = allRepos.filter(r => r.language === lang);
           renderRepos(filtered);
+          clearFilterBtn.style.display = 'inline-block';
         });
         languageButtons.appendChild(btn);
       });
     }
+
+    clearFilterBtn.addEventListener('click', () => {
+      const allBtn = [...document.querySelectorAll('.language-button')].find(b => b.textContent === 'Todos');
+      if (allBtn) {
+        setActiveButton(allBtn);
+      }
+      renderRepos(allRepos);
+      clearFilterBtn.style.display = 'none';
+    });
 
     function setActiveButton(activeBtn) {
       document.querySelectorAll('.language-button').forEach(btn => btn.classList.remove('active'));
@@ -252,35 +280,58 @@
 
     function renderRepos(repos) {
       repoList.innerHTML = '';
+
+      const grouped = {};
       repos.forEach(repo => {
-        const li = document.createElement('li');
-        li.className = 'repo-item';
+        const lang = repo.language || 'Outros';
+        if (!grouped[lang]) grouped[lang] = [];
+        grouped[lang].push(repo);
+      });
 
-        li.innerHTML = `
-          <span class="repo-name">
-            <span><i class="fas fa-folder"></i> ${repo.name}</span>
-            <a class="repo-link" href="${repo.html_url}" target="_blank"><i class="fas fa-arrow-up-right-from-square"></i></a>
-          </span>
-          <div class="repo-description">
-            ${repo.description || 'Sem descrição.'}
-          </div>
-        `;
+      Object.keys(grouped).sort().forEach(language => {
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'repo-language-group';
 
-        li.addEventListener('click', e => {
-          if (e.target.closest('a')) return;
-          document.querySelectorAll('.repo-item').forEach(el => {
-            if (el !== li) {
-              el.classList.remove('expanded');
-              const icon = el.querySelector('i');
-              if (icon) icon.className = 'fas fa-folder';
-            }
+        const title = document.createElement('h3');
+        title.className = 'repo-language-title';
+        title.textContent = language;
+        groupDiv.appendChild(title);
+
+        grouped[language].forEach(repo => {
+          const li = document.createElement('li');
+          li.className = 'repo-item';
+
+          li.innerHTML = `
+            <div class="repo-name">
+              <span><i class="fas fa-folder"></i> ${repo.name}</span>
+              <a class="repo-link" href="${repo.html_url}" target="_blank" title="Ver no GitHub">
+                <span>Ver no GitHub</span>
+                <i class="fas fa-arrow-up-right-from-square"></i>
+              </a>
+            </div>
+            <div class="repo-description">
+              ${repo.description || 'Sem descrição.'}
+            </div>
+          `;
+
+          li.addEventListener('click', e => {
+            if (e.target.closest('a')) return;
+            document.querySelectorAll('.repo-item').forEach(el => {
+              if (el !== li) {
+                el.classList.remove('expanded');
+                const icon = el.querySelector('i');
+                if (icon && !icon.closest('a')) icon.className = 'fas fa-folder';
+              }
+            });
+            li.classList.toggle('expanded');
+            const icon = li.querySelector('i');
+            if (icon && !icon.closest('a')) icon.className = li.classList.contains('expanded') ? 'fas fa-folder-open' : 'fas fa-folder';
           });
-          li.classList.toggle('expanded');
-          const icon = li.querySelector('i');
-          if (icon && !icon.closest('a')) icon.className = li.classList.contains('expanded') ? 'fas fa-folder-open' : 'fas fa-folder';
+
+          groupDiv.appendChild(li);
         });
 
-        repoList.appendChild(li);
+        repoList.appendChild(groupDiv);
       });
     }
 
