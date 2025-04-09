@@ -7,69 +7,78 @@
   <meta name="keywords" content="Ricardo Lopes, front-end, desenvolvedor, GitHub, JavaScript, open source" />
   <meta name="author" content="Ricardo Lopes" />
   <title>Ricardo Lopes | Desenvolvedor Front-end</title>
-  
-  <!-- Fonte sólida tipo Aptos -->
+
+  <!-- Fontes e Ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-dP7bJp6z4APlHdPgoMgN1aBBoXzY58vTbSbgN7B0EdpOEHZiPl/fxO/7KkFka84MFYvsn9Lf8jYUG4X+Ix7pVg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap');
 
     :root {
-      --cor-clara: #D2DE81;
-      --cor-escura: #C7D75B;
+      --cor-principal: #C7D75B;
+      --cor-secundaria: #D2DE81;
+      --cinza-claro: #f5f5f5;
+      --cinza-escuro: #333;
+      --borda-suave: #e0e0e0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
       font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      background-color: #f9f9f9;
-      color: #2e2e2e;
-      line-height: 1.6;
-      padding: 40px 20px;
-      display: flex;
-      justify-content: center;
+      background-color: var(--cinza-claro);
+      color: var(--cinza-escuro);
+      padding: 20px;
     }
 
     .container {
       max-width: 800px;
-      width: 100%;
-      background-color: white;
-      padding: 40px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 30px 25px;
       border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
     }
 
     h1 {
-      font-size: 2.5em;
+      font-size: 2em;
       margin-bottom: 10px;
-      color: var(--cor-escura);
+      color: var(--cor-principal);
     }
 
     .tagline {
-      color: #555;
       font-size: 1.1em;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
+      color: #666;
     }
 
     .social-links {
-      margin-bottom: 40px;
+      margin-bottom: 30px;
     }
 
     .social-links a {
-      margin-right: 15px;
-      color: var(--cor-clara);
-      font-size: 1.3em;
       text-decoration: none;
+      color: var(--cor-principal);
+      font-weight: 600;
+      margin-right: 20px;
+      font-size: 1.2em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       transition: color 0.3s ease;
     }
 
     .social-links a:hover {
-      color: var(--cor-escura);
+      color: var(--cor-secundaria);
     }
 
     .repositories-section h2 {
-      border-bottom: 2px solid #eee;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
-      font-size: 1.8em;
+      font-size: 1.5em;
+      margin-bottom: 15px;
+      color: #222;
     }
 
     #repositories-list {
@@ -77,57 +86,68 @@
       padding: 0;
     }
 
-    #repositories-list li {
-      background: #fefefe;
-      border-left: 5px solid var(--cor-clara);
-      padding: 15px 20px;
-      margin-bottom: 15px;
-      border-radius: 8px;
+    .repo-item {
+      padding: 15px 0;
+      border-bottom: 1px solid var(--borda-suave);
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease;
     }
 
-    #repositories-list li:hover {
-      background-color: #f1f1f1;
+    .repo-item:hover {
+      background-color: #fafafa;
     }
 
     .repo-name {
       font-weight: 600;
-      font-size: 1.1em;
-      color: #333;
-      margin: 0;
+      font-size: 1.05em;
+      color: #222;
     }
 
     .repo-description {
-      margin-top: 10px;
       font-size: 0.95em;
-      color: #666;
+      color: #555;
+      margin-top: 8px;
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.5s ease;
+      transition: max-height 0.4s ease;
     }
 
-    li.expanded .repo-description {
-      max-height: 200px;
+    .repo-item.expanded .repo-description {
+      max-height: 300px;
     }
 
-    .repo-description a {
-      display: inline-block;
-      margin-top: 10px;
-      color: var(--cor-escura);
-      font-weight: 500;
+    .repo-link {
+      font-size: 0.9em;
+      color: var(--cor-principal);
       text-decoration: none;
+      display: inline-block;
+      margin-top: 6px;
     }
 
-    .repo-description a:hover {
+    .repo-link:hover {
       text-decoration: underline;
     }
 
     .footer {
       text-align: center;
-      margin-top: 60px;
+      margin-top: 50px;
       font-size: 0.9em;
-      color: #999;
+      color: #aaa;
+    }
+
+    @media (max-width: 600px) {
+      .repo-name {
+        font-size: 1em;
+      }
+
+      .repo-description {
+        font-size: 0.9em;
+      }
+
+      .social-links a {
+        display: block;
+        margin-bottom: 10px;
+      }
     }
   </style>
 </head>
@@ -137,7 +157,8 @@
     <p class="tagline">Desenvolvedor Front-end | Entusiasta de Open Source</p>
 
     <div class="social-links">
-      <a href="https://github.com/bsidenet" target="_blank">GitHub</a>
+      <a href="https://github.com/bsidenet" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+      <a href="https://www.linkedin.com/in/bsidenet/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
     </div>
 
     <div class="repositories-section">
@@ -165,20 +186,17 @@
 
           data.forEach(repo => {
             const li = document.createElement('li');
+            li.className = 'repo-item';
             li.innerHTML = `
-              <p class="repo-name">${repo.name}</p>
+              <span class="repo-name">${repo.name}</span>
               <div class="repo-description">
                 ${repo.description || 'Sem descrição disponível.'}
                 <br />
-                <a href="${repo.html_url}" target="_blank">Ver no GitHub ↗</a>
+                <a class="repo-link" href="${repo.html_url}" target="_blank">Ver no GitHub</a>
               </div>
             `;
 
             li.addEventListener('click', () => {
-              const items = repoList.querySelectorAll('li');
-              items.forEach(item => {
-                if (item !== li) item.classList.remove('expanded');
-              });
               li.classList.toggle('expanded');
             });
 
