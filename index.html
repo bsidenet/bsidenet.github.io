@@ -124,18 +124,6 @@
       padding: 0;
     }
 
-    .repo-language-group {
-      margin-bottom: 30px;
-    }
-
-    .repo-language-title {
-      font-size: 1.3em;
-      margin: 20px 0 10px;
-      color: var(--verde-principal);
-      border-bottom: 1px solid var(--verde-principal);
-      padding-bottom: 5px;
-    }
-
     .repo-item {
       padding: 16px 20px;
       border-bottom: 1px solid var(--borda-suave);
@@ -156,12 +144,13 @@
       font-size: 0.95em;
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.5s ease, opacity 0.4s ease;
+      transition: max-height 0.4s ease, opacity 0.4s ease;
       opacity: 0;
+      margin-top: 6px;
     }
 
     .repo-item.expanded .repo-description {
-      max-height: 300px;
+      max-height: 100px;
       opacity: 1;
     }
 
@@ -266,9 +255,7 @@
 
     clearFilterBtn.addEventListener('click', () => {
       const allBtn = [...document.querySelectorAll('.language-button')].find(b => b.textContent === 'Todos');
-      if (allBtn) {
-        setActiveButton(allBtn);
-      }
+      if (allBtn) setActiveButton(allBtn);
       renderRepos(allRepos);
       clearFilterBtn.style.display = 'none';
     });
@@ -281,57 +268,39 @@
     function renderRepos(repos) {
       repoList.innerHTML = '';
 
-      const grouped = {};
       repos.forEach(repo => {
-        const lang = repo.language || 'Outros';
-        if (!grouped[lang]) grouped[lang] = [];
-        grouped[lang].push(repo);
-      });
+        const li = document.createElement('li');
+        li.className = 'repo-item';
 
-      Object.keys(grouped).sort().forEach(language => {
-        const groupDiv = document.createElement('div');
-        groupDiv.className = 'repo-language-group';
+        li.innerHTML = `
+          <div class="repo-name">
+            <span><i class="fas fa-folder"></i> ${repo.name}</span>
+            <a class="repo-link" href="${repo.html_url}" target="_blank" title="Ver no GitHub">
+              <span>Ver no GitHub</span>
+              <i class="fas fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+          <div class="repo-description">
+            ${repo.description || 'Sem descrição.'}
+          </div>
+        `;
 
-        const title = document.createElement('h3');
-        title.className = 'repo-language-title';
-        title.textContent = language;
-        groupDiv.appendChild(title);
-
-        grouped[language].forEach(repo => {
-          const li = document.createElement('li');
-          li.className = 'repo-item';
-
-          li.innerHTML = `
-            <div class="repo-name">
-              <span><i class="fas fa-folder"></i> ${repo.name}</span>
-              <a class="repo-link" href="${repo.html_url}" target="_blank" title="Ver no GitHub">
-                <span>Ver no GitHub</span>
-                <i class="fas fa-arrow-up-right-from-square"></i>
-              </a>
-            </div>
-            <div class="repo-description">
-              ${repo.description || 'Sem descrição.'}
-            </div>
-          `;
-
-          li.addEventListener('click', e => {
-            if (e.target.closest('a')) return;
-            document.querySelectorAll('.repo-item').forEach(el => {
-              if (el !== li) {
-                el.classList.remove('expanded');
-                const icon = el.querySelector('i');
-                if (icon && !icon.closest('a')) icon.className = 'fas fa-folder';
-              }
-            });
-            li.classList.toggle('expanded');
-            const icon = li.querySelector('i');
-            if (icon && !icon.closest('a')) icon.className = li.classList.contains('expanded') ? 'fas fa-folder-open' : 'fas fa-folder';
+        li.addEventListener('click', e => {
+          if (e.target.closest('a')) return;
+          const isExpanded = li.classList.contains('expanded');
+          document.querySelectorAll('.repo-item').forEach(el => {
+            el.classList.remove('expanded');
+            const icon = el.querySelector('i');
+            if (icon && !icon.closest('a')) icon.className = 'fas fa-folder';
           });
-
-          groupDiv.appendChild(li);
+          if (!isExpanded) {
+            li.classList.add('expanded');
+            const icon = li.querySelector('i');
+            if (icon && !icon.closest('a')) icon.className = 'fas fa-folder-open';
+          }
         });
 
-        repoList.appendChild(groupDiv);
+        repoList.appendChild(li);
       });
     }
 
