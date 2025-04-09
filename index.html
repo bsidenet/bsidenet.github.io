@@ -8,10 +8,14 @@
   <meta name="author" content="Ricardo Lopes" />
   <title>Ricardo Lopes | Desenvolvedor Front-end</title>
 
+  <!-- Ícones e fontes -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <style>
+    /* Importa a fonte */
     @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap');
 
+    /* Paleta de cores personalizada */
     :root {
       --verde-principal: #b5ffb5;
       --verde-secundario: #c4e1ad;
@@ -22,6 +26,7 @@
       --text-dark: #f1f1f1;
     }
 
+    /* Estilo geral */
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: var(--bg-dark);
@@ -144,24 +149,24 @@
       font-size: 0.95em;
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.4s ease, opacity 0.4s ease;
+      transition: max-height 0.5s ease, opacity 0.4s ease, padding 0.4s ease;
       opacity: 0;
-      margin-top: 6px;
+      padding-top: 0;
     }
 
     .repo-item.expanded .repo-description {
-      max-height: 100px;
+      max-height: 300px;
       opacity: 1;
+      padding-top: 10px;
     }
 
     .repo-link {
-      font-size: 0.9em;
+      font-size: 1.2em;
       color: var(--verde-principal);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      white-space: nowrap;
     }
 
     .footer {
@@ -169,6 +174,44 @@
       margin-top: 50px;
       font-size: 0.9em;
       color: #aaa;
+    }
+
+    .search-sort {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    #searchInput {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--borda-suave);
+      font-size: 1em;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+
+    .page-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--verde-principal);
+      background: transparent;
+      color: var(--verde-principal);
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    .page-btn.active {
+      background-color: var(--verde-principal);
+      color: #1e1e1e;
     }
   </style>
 </head>
@@ -189,11 +232,13 @@
 
     <div class="repositories-section">
       <h2>Meus Repositórios Públicos</h2>
+      <div class="search-sort">
+        <input type="text" id="searchInput" placeholder="Pesquisar repositório..." />
+        <button id="sortBtn" class="language-button">Ordenar por ⭐</button>
+      </div>
       <div class="language-buttons" id="languageButtons"></div>
       <ul id="repositories-list"></ul>
-      <button id="clearFilterBtn" class="language-button" style="display: none; margin-top: 15px;">
-        Ver Todos
-      </button>
+      <div class="pagination" id="pagination"></div>
     </div>
   </div>
 
@@ -207,25 +252,29 @@
     const languageButtons = document.getElementById('languageButtons');
     const darkToggle = document.getElementById('darkToggle');
     const icon = darkToggle.querySelector('i');
-    const clearFilterBtn = document.getElementById('clearFilterBtn');
-    let allRepos = [];
+    const searchInput = document.getElementById('searchInput');
+    const sortBtn = document.getElementById('sortBtn');
+    const pagination = document.getElementById('pagination');
+    let allRepos = [], filteredRepos = [], sortAsc = false, currentPage = 1;
+    const perPage = 5;
 
-    const toggleTheme = () => {
+    // Alterna entre dark e light mode
+    darkToggle.addEventListener('click', () => {
       document.body.classList.toggle('light');
       icon.className = document.body.classList.contains('light') ? 'fas fa-sun' : 'fas fa-moon';
-    };
+    });
 
-    darkToggle.addEventListener('click', toggleTheme);
-
+    // Busca os repositórios do GitHub
     fetch(`https://api.github.com/users/${username}/repos?sort=pushed`)
       .then(res => res.json())
       .then(data => {
         allRepos = data;
         const languages = new Set(data.map(repo => repo.language).filter(Boolean));
         renderLanguageButtons(languages);
-        renderRepos(data);
+        applyFilters();
       });
 
+    // Cria botões de filtro por linguagem
     function renderLanguageButtons(langs) {
       languageButtons.innerHTML = '';
 
@@ -234,8 +283,7 @@
       allBtn.className = 'language-button active';
       allBtn.addEventListener('click', () => {
         setActiveButton(allBtn);
-        renderRepos(allRepos);
-        clearFilterBtn.style.display = 'none';
+        applyFilters();
       });
       languageButtons.appendChild(allBtn);
 
@@ -245,66 +293,106 @@
         btn.className = 'language-button';
         btn.addEventListener('click', () => {
           setActiveButton(btn);
-          const filtered = allRepos.filter(r => r.language === lang);
-          renderRepos(filtered);
-          clearFilterBtn.style.display = 'inline-block';
+          applyFilters();
         });
         languageButtons.appendChild(btn);
       });
     }
 
-    clearFilterBtn.addEventListener('click', () => {
-      const allBtn = [...document.querySelectorAll('.language-button')].find(b => b.textContent === 'Todos');
-      if (allBtn) setActiveButton(allBtn);
-      renderRepos(allRepos);
-      clearFilterBtn.style.display = 'none';
-    });
-
+    // Define botão ativo
     function setActiveButton(activeBtn) {
       document.querySelectorAll('.language-button').forEach(btn => btn.classList.remove('active'));
       activeBtn.classList.add('active');
     }
 
-    function renderRepos(repos) {
-      repoList.innerHTML = '';
+    // Aplica filtros e ordenação
+    function applyFilters() {
+      const lang = document.querySelector('.language-button.active')?.textContent;
+      const searchTerm = searchInput.value.toLowerCase();
 
-      repos.forEach(repo => {
+      filteredRepos = allRepos.filter(repo => {
+        const matchLang = lang === 'Todos' || !lang || repo.language === lang;
+        const matchName = repo.name.toLowerCase().includes(searchTerm);
+        return matchLang && matchName;
+      });
+
+      sortRepos();
+      currentPage = 1;
+      renderRepos();
+    }
+
+    // Ordena os repositórios por número de estrelas
+    function sortRepos() {
+      filteredRepos.sort((a, b) => {
+        return sortAsc ? a.stargazers_count - b.stargazers_count : b.stargazers_count - a.stargazers_count;
+      });
+    }
+
+    // Renderiza os repositórios na página atual
+    function renderRepos() {
+      repoList.innerHTML = '';
+      const start = (currentPage - 1) * perPage;
+      const currentRepos = filteredRepos.slice(start, start + perPage);
+
+      currentRepos.forEach(repo => {
         const li = document.createElement('li');
         li.className = 'repo-item';
+
+        const lastUpdate = new Date(repo.updated_at).toLocaleDateString('pt-PT', {
+          day: '2-digit', month: 'short', year: 'numeric'
+        });
 
         li.innerHTML = `
           <div class="repo-name">
             <span><i class="fas fa-folder"></i> ${repo.name}</span>
             <a class="repo-link" href="${repo.html_url}" target="_blank" title="Ver no GitHub">
-              <span>Ver no GitHub</span>
-              <i class="fas fa-arrow-up-right-from-square"></i>
+              <i class="fab fa-github"></i>
             </a>
           </div>
           <div class="repo-description">
             ${repo.description || 'Sem descrição.'}
-          </div>
-        `;
+            <div style="margin-top: 8px; font-size: 0.85em; color: #aaa;">
+              ⭐ ${repo.stargazers_count} • Atualizado em ${lastUpdate}
+            </div>
+          </div>`;
 
         li.addEventListener('click', e => {
           if (e.target.closest('a')) return;
-          const isExpanded = li.classList.contains('expanded');
           document.querySelectorAll('.repo-item').forEach(el => {
-            el.classList.remove('expanded');
-            const icon = el.querySelector('i');
-            if (icon && !icon.closest('a')) icon.className = 'fas fa-folder';
+            if (el !== li) el.classList.remove('expanded');
           });
-          if (!isExpanded) {
-            li.classList.add('expanded');
-            const icon = li.querySelector('i');
-            if (icon && !icon.closest('a')) icon.className = 'fas fa-folder-open';
-          }
+          li.classList.toggle('expanded');
         });
 
         repoList.appendChild(li);
       });
+
+      renderPagination();
     }
 
-    document.body.classList.remove('light');
+    // Renderiza os botões de página
+    function renderPagination() {
+      pagination.innerHTML = '';
+      const totalPages = Math.ceil(filteredRepos.length / perPage);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+        btn.addEventListener('click', () => {
+          currentPage = i;
+          renderRepos();
+        });
+        pagination.appendChild(btn);
+      }
+    }
+
+    // Eventos para pesquisa e ordenação
+    searchInput.addEventListener('input', applyFilters);
+    sortBtn.addEventListener('click', () => {
+      sortAsc = !sortAsc;
+      applyFilters();
+    });
   </script>
 </body>
 </html>
