@@ -1,218 +1,207 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ricardo Lopes | Desenvolvedor Front-end</title>
-    <meta name="description" content="Página pessoal de Ricardo Lopes, desenvolvedor front-end e entusiasta de open source. Veja os meus repositórios públicos no GitHub.">
-    <meta name="keywords" content="Ricardo Lopes, Front-end, GitHub, Open Source, Programador, HTML, CSS, JavaScript">
+    <meta name="description" content="Página pessoal de Ricardo Lopes, desenvolvedor front-end e entusiasta de open source.">
     <meta name="author" content="Ricardo Lopes">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap">
+    <meta name="keywords" content="Ricardo Lopes, Front-end, GitHub, Open Source, Web Developer, Portfolio">
+    
+    <!-- Google Fonts: Inter Thin -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --cor-principal: #C7D75B;
-            --cor-secundaria: #D2DE81;
-            --cor-fundo: #fdfdf9;
-            --cor-texto: #222;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            --cor-escura: #C7D75B;
+            --cor-clara: #D2DE81;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-weight: 200;
-            background-color: var(--cor-fundo);
-            color: var(--cor-texto);
-            padding: 40px 20px;
+            margin: 0;
+            background-color: var(--cor-clara);
+            color: #2b2b2b;
+            line-height: 1.7;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 40px 20px;
         }
 
         .container {
-            width: 100%;
-            max-width: 800px;
+            max-width: 700px;
             background-color: #fff;
-            border-radius: 12px;
             padding: 40px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-        }
-
-        header {
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
             text-align: center;
-            margin-bottom: 30px;
         }
 
         h1 {
+            color: var(--cor-escura);
             font-size: 2.8em;
-            font-weight: 600;
-            color: var(--cor-principal);
+            font-weight: 400;
+            margin-bottom: 10px;
         }
 
         .tagline {
+            color: #444;
             font-size: 1.1em;
-            color: #666;
-            margin-top: 10px;
+            margin-bottom: 30px;
         }
 
         .social-links {
-            margin-top: 20px;
+            margin-bottom: 35px;
         }
 
         .social-links a {
-            color: var(--cor-principal);
-            font-size: 1.4em;
+            display: inline-block;
             margin: 0 10px;
-            transition: color 0.3s ease;
+            color: var(--cor-escura);
             text-decoration: none;
+            font-size: 1.5em;
+            transition: color 0.3s;
         }
 
         .social-links a:hover {
-            color: var(--cor-secundaria);
+            color: #a0b23f;
         }
 
-        section.repositories {
-            margin-top: 40px;
+        .repositories-section {
+            text-align: left;
+            width: 100%;
         }
 
-        section.repositories h2 {
-            font-size: 1.8em;
-            color: var(--cor-principal);
-            border-bottom: 2px solid var(--cor-secundaria);
+        .repositories-section h2 {
+            color: var(--cor-escura);
+            border-bottom: 2px solid #ccc;
             padding-bottom: 10px;
             margin-bottom: 20px;
+            font-size: 1.6em;
+            font-weight: 400;
         }
 
-        ul#repositories-list {
+        #repositories-list {
             list-style: none;
+            padding: 0;
         }
 
-        ul#repositories-list li {
-            background: var(--cor-secundaria);
-            margin-bottom: 15px;
+        #repositories-list li {
+            background-color: #fff;
+            border: 1px solid var(--cor-clara);
+            border-left: 6px solid var(--cor-escura);
             padding: 20px;
-            border-radius: 8px;
-            transition: background 0.3s ease;
-        }
-
-        ul#repositories-list li:hover {
-            background: var(--cor-principal);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
         }
 
         .repo-name {
-            font-weight: 400;
-            font-size: 1.2em;
-            color: #222;
             cursor: pointer;
+            font-weight: 400;
+            font-size: 1.1em;
+            color: #222;
         }
 
         .repo-description {
-            margin-top: 10px;
             font-size: 0.95em;
-            display: none;
-            color: #333;
+            color: #555;
+            margin-top: 10px;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s ease, opacity 0.4s ease;
+        }
+
+        #repositories-list li.expanded .repo-description {
+            max-height: 300px;
+            opacity: 1;
         }
 
         .repo-link {
             display: inline-block;
-            margin-top: 10px;
-            font-size: 0.9em;
-            color: #222;
+            margin-top: 8px;
+            color: var(--cor-escura);
             text-decoration: underline;
         }
 
-        li.expanded .repo-description {
-            display: block;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 60px;
-            font-size: 0.85em;
-            color: #888;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 25px;
-            }
-
-            h1 {
-                font-size: 2em;
-            }
+        .footer {
+            margin-top: 50px;
+            font-size: 0.9em;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <main class="container">
-        <header>
-            <h1>Ricardo Lopes</h1>
-            <p class="tagline">Desenvolvedor Front-end | Entusiasta de Open Source</p>
-            <div class="social-links">
-                <a href="https://github.com/bsidenet" target="_blank" aria-label="GitHub">GitHub</a>
-            </div>
-        </header>
+    <div class="container">
+        <h1>Ricardo Lopes</h1>
+        <p class="tagline">Desenvolvedor Front-end | Entusiasta de Open Source</p>
 
-        <section class="repositories">
-            <h2>Repositórios Públicos</h2>
+        <!-- Links para redes sociais -->
+        <div class="social-links">
+            <a href="https://github.com/bsidenet" target="_blank" aria-label="GitHub">GitHub</a>
+        </div>
+
+        <!-- Secção de repositórios -->
+        <div class="repositories-section">
+            <h2>Meus Repositórios Públicos</h2>
             <ul id="repositories-list">
-                <li>A carregar repositórios...</li>
+                <!-- Os repositórios serão carregados aqui dinamicamente -->
             </ul>
-        </section>
-    </main>
+        </div>
+    </div>
 
-    <footer>
+    <!-- Rodapé -->
+    <div class="footer">
         <p>&copy; 2025 Ricardo Lopes. Todos os direitos reservados.</p>
-    </footer>
+    </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const username = 'bsidenet';
-        const list = document.getElementById('repositories-list');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const username = 'bsidenet';
+            const list = document.getElementById('repositories-list');
 
-        fetch(`https://api.github.com/users/${username}/repos?sort=pushed`)
-            .then(response => response.json())
-            .then(repos => {
-                list.innerHTML = '';
-                if (repos.length === 0) {
-                    list.innerHTML = '<li>Sem repositórios públicos.</li>';
-                    return;
-                }
+            fetch(`https://api.github.com/users/${username}/repos?sort=pushed`)
+                .then(response => response.json())
+                .then(repos => {
+                    list.innerHTML = '';
+                    if (!repos || repos.length === 0) {
+                        list.innerHTML = '<li>Sem repositórios públicos.</li>';
+                        return;
+                    }
 
-                repos.forEach(repo => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `
-                        <span class="repo-name">${repo.name}</span>
-                        <p class="repo-description">${repo.description || 'Sem descrição disponível.'}<br>
-                        <a href="${repo.html_url}" target="_blank" class="repo-link">Ver no GitHub</a></p>
-                    `;
+                    repos.forEach(repo => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <span class="repo-name">${repo.name}</span>
+                            <p class="repo-description">${repo.description || 'Sem descrição disponível.'}<br>
+                            <a href="${repo.html_url}" target="_blank" class="repo-link">Ver no GitHub</a></p>
+                        `;
 
-                    li.querySelector('.repo-name').addEventListener('click', () => {
-                        const allItems = list.querySelectorAll('li');
-                        const isAlreadyOpen = li.classList.contains('expanded');
+                        // Ao clicar no nome do repositório
+                        li.querySelector('.repo-name').addEventListener('click', () => {
+                            const allItems = list.querySelectorAll('li');
+                            const isOpen = li.classList.contains('expanded');
 
-                        // Fecha todos
-                        allItems.forEach(item => item.classList.remove('expanded'));
+                            // Fecha todos os repositórios
+                            allItems.forEach(item => item.classList.remove('expanded'));
 
-                        // Se não estava aberto, abre este
-                        if (!isAlreadyOpen) {
-                            li.classList.add('expanded');
-                        }
+                            // Abre apenas este, se não estiver aberto
+                            if (!isOpen) {
+                                li.classList.add('expanded');
+                            }
+                        });
+
+                        list.appendChild(li);
                     });
-
-                    list.appendChild(li);
+                })
+                .catch(() => {
+                    list.innerHTML = '<li>Erro ao carregar os repositórios.</li>';
                 });
-            })
-            .catch(() => {
-                list.innerHTML = '<li>Erro ao carregar os repositórios.</li>';
-            });
-    });
-</script>
-
+        });
+    </script>
 </body>
 </html>
