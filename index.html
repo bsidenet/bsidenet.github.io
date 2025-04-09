@@ -9,7 +9,7 @@
   <title>Ricardo Lopes | Desenvolvedor Front-end</title>
 
   <!-- Fontes e Ícones -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-dP7bJp6z4APlHdPgoMgN1aBBoXzY58vTbSbgN7B0EdpOEHZiPl/fxO/7KkFka84MFYvsn9Lf8jYUG4X+Ix7pVg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap');
 
@@ -87,7 +87,7 @@
     }
 
     .repo-item {
-      padding: 15px 0;
+      padding: 16px 20px;
       border-bottom: 1px solid var(--borda-suave);
       cursor: pointer;
       transition: background-color 0.3s ease;
@@ -101,6 +101,9 @@
       font-weight: 600;
       font-size: 1.05em;
       color: #222;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .repo-description {
@@ -188,7 +191,7 @@
             const li = document.createElement('li');
             li.className = 'repo-item';
             li.innerHTML = `
-              <span class="repo-name">${repo.name}</span>
+              <span class="repo-name"><i class="fas fa-folder-open"></i> ${repo.name}</span>
               <div class="repo-description">
                 ${repo.description || 'Sem descrição disponível.'}
                 <br />
@@ -197,6 +200,10 @@
             `;
 
             li.addEventListener('click', () => {
+              const items = repoList.querySelectorAll('.repo-item');
+              items.forEach(item => {
+                if (item !== li) item.classList.remove('expanded');
+              });
               li.classList.toggle('expanded');
             });
 
